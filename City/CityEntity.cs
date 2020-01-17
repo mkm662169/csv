@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cities
+/*namespace Cities
 {
     public class CityEntity : CityModel
     {
@@ -12,4 +12,4 @@ namespace Cities
 
         public virtual CountryEntity Country { get; set; }
     }
-}
+}*/

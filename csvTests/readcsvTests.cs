@@ -2,13 +2,46 @@
 using Csv;
 using CsvHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace csv.Tests
+namespace Csv.Tests
 {
+    [TestClass()]
+    public class readcsvTests
+    {
+        [TestMethod()]
+        public void WritecsvFileTest()
+        {
+            string file_name = "capital";
+            var path = "c://csvfiles//worldcities.csv";
+            var doubleTypeConversion = new DoubleConversion();
+            IList<CityModel> myList = ReadCsv.ReadCsvFile<CityModel, CityMap>(path, doubleTypeConversion);
+
+            IEnumerable<CityModel> countryCapitalQuery = from s in myList
+                                                         where s.Capital.Equals("primary")
+                                                         orderby s.Capital ascending
+                                                         select s;
+
+            foreach (CityModel city in countryCapitalQuery)
+            {
+                Debug.Write(city.Capital + ": " + city.City_name + Environment.NewLine);
+            }
+
+            writecsv.WritecsvFile<CityModel>(countryCapitalQuery, file_name);
+
+            var QSCount = (from city in countryCapitalQuery
+                           select city).Count();
+            Debug.Write(QSCount);
+
+            Assert.AreEqual(15493, myList.Count());
+        }
+    }
+
     [TestClass()]
     public class ReadcsvTests
     {
@@ -19,14 +52,10 @@ namespace csv.Tests
             var doubleTypeConversion = new DoubleConversion();
             IList<CityModelImport> myList = ReadCsv.ReadCsvFile<CityModelImport, CityMap>(path, doubleTypeConversion);
             var countryCapitalQuery = (from s in myList
-                                      where s.Capital.Equals("primary")
-                                      orderby s.Country ascending
-                                      select s);
-            /*
-            foreach (CityModelImport city in countryCapitalQuery)
-            {
-                Debug.Write(city.Country + ": " + city.City_name + Environment.NewLine);
-            }*/
+                                       where s.Capital.Equals("primary")
+                                       orderby s.Country ascending
+                                       select s);
+
             var queryName = nameof(countryCapitalQuery);
             var writePath = "c://csvfiles//" + queryName + ".csv";
             using (var writer = new StreamWriter(writePath))
@@ -39,7 +68,7 @@ namespace csv.Tests
             var QSCount = (from city in countryCapitalQuery
                            select city).Count();
 
-            //Debug.Write(QSCount);
+
 
             Assert.AreEqual(15493, myList.Count());
 
@@ -61,16 +90,16 @@ namespace csv.Tests
             using (var db = new CitiesContext())
             {
                 foreach (var country in countryGroups)
-            {
-                var countryName = country.Key.Country;
-                var ISO2 = country.Key.ISO2;
-                var ISO3 = country.Key.ISO3;
-                var CountryEntity = new CountryEntity
                 {
-                    Name = countryName,
-                    ISO2 = ISO2,
-                    ISO3 = ISO3
-                };
+                    var countryName = country.Key.Country;
+                    var ISO2 = country.Key.ISO2;
+                    var ISO3 = country.Key.ISO3;
+                    var CountryEntity = new CountryEntity
+                    {
+                        Name = countryName,
+                        ISO2 = ISO2,
+                        ISO3 = ISO3
+                    };
                     db.Countries.Add(CountryEntity);
                     db.SaveChanges();
                     int id = CountryEntity.CountryID;
@@ -93,13 +122,8 @@ namespace csv.Tests
                     }
                 }
             }
-            // countryQuery = records.Where(city => city.Country.Equals("United States"));
-            /*
-            foreach (CityModel city in countryQuery)
-            {
-                var name = city.City_name.ToString();
-            }
-            */
+
+
         }
     }
 }

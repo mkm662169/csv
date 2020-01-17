@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cities
+/*namespace Cities
 {
     public class CountryModel
     {
@@ -10,4 +10,4 @@ namespace Cities
         public string ISO2 { get; set; }
         public string ISO3 { get; set; }
     }
-}
+}*/
