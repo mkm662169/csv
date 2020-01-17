@@ -20,7 +20,7 @@ namespace Cities
         public float Id { get; set; }
     }
 
-    public class CountryModel
+    /*public class CountryModel
     {
         public string Name { get; set; }
         public string ISO2 { get; set; }
@@ -34,7 +34,7 @@ namespace Cities
 
         public virtual List<CityEntity> Cities { get; set; }
     }
-
+    */
     public class CityModel
     {
         public string City_name { get; set; }
@@ -47,13 +47,13 @@ namespace Cities
         public int CountryId { get; set; }
     }
 
-    public class CityEntity : CityModel
+    /*public class CityEntity : CityModel
     {
         [Key]
         public int CityID { get; set; }
 
         public virtual CountryEntity Country { get; set; }
-    }
+    }*/
 
     public class CitiesContext : DbContext
     {
