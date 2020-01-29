@@ -2,7 +2,7 @@
 
 namespace Cities
 {
-    public sealed class CityMap : ClassMap<CityModelImport>
+    public sealed class CityMap : ClassMap<CitiesImportModel>
     {
         public CityMap()
         {
