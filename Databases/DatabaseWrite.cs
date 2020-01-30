@@ -1,57 +1,19 @@
-﻿using Cities;
-using Csv;
-using CsvHelper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Cities;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
-namespace csv.Tests
+namespace Databases
 {
-    [TestClass()]
-    public class ReadcsvTests
+    public class DatabaseWrite
     {
-        //private IList<CitiesImportModel> myList = new IList<CitiesImportModel>();
-        private dynamic myList;
-
-        [TestMethod()]
-        public void ReadCsvTest()
+        public static void WriteToDB(IList<CitiesImportModel> myList, string typeOfCity)
         {
-            var path = "c://csvfiles//worldcities.csv";
-            var doubleTypeConversion = new DoubleConversion();
-            myList = ReadCsv.ReadCsvFile<CitiesImportModel, CityMap>(path, doubleTypeConversion);
-            Assert.IsNotNull(myList);
-        }
-        [TestMethod()]
-        public void AllCSVTest()
-        {
-            var path = "c://csvfiles//worldcities.csv";
-            var doubleTypeConversion = new DoubleConversion();
-            IList<CitiesImportModel> myList = ReadCsv.ReadCsvFile<CitiesImportModel, CityMap>(path, doubleTypeConversion);
             var countryCapitalQuery = (from s in myList
-                                       where s.Capital.Equals("primary")
+                                       where s.Capital.Equals(typeOfCity)
                                        orderby s.Country ascending
                                        select s);
-            /*
-            foreach (CityModelImport city in countryCapitalQuery)
-            {
-                Debug.Write(city.Country + ": " + city.City_name + Environment.NewLine);
-           
-            var queryName = nameof(countryCapitalQuery);
-            var writePath = "c://csvfiles//" + queryName + ".csv";
-            using (var writer = new StreamWriter(writePath))
-            using (var csv = new CsvWriter(writer))
-            {
-                csv.WriteRecords(countryCapitalQuery);
-            }
-            Assert.IsTrue(File.Exists(writePath));
-             }
-            var QSCount = (from city in countryCapitalQuery
-                           select city).Count();
-            //Debug.Write(QSCount);
-            Assert.AreEqual(15493, myList.Count());
-            */
+
             using (var dbContext = new CityContext())
             {
                 dbContext.Database.Connection.Close();
@@ -83,7 +45,6 @@ namespace csv.Tests
                     db.Countries.Add(CountryEntity);
                     db.SaveChanges();
                     int id = CountryEntity.CountryID;
-                    Debug.Write(country);
                     foreach (var city in country)
                     {
                         var CityEntity = new CityEntity
@@ -102,13 +63,6 @@ namespace csv.Tests
                     }
                 }
             }
-            // countryQuery = records.Where(city => city.Country.Equals("United States"));
-            /*
-            foreach (CityModel city in countryQuery)
-            {
-                var name = city.City_name.ToString();
-            }
-            */
         }
     }
 }
